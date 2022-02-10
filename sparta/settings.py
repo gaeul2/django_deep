@@ -28,6 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = "${{ secrets.SECRET_KEY }}"
 DEBUG = True
 
 # 이친구는 타입힌트가 필요함.
