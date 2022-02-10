@@ -1,0 +1,30 @@
+name: Django CI
+
+on: #액션이 언제 실행되는지 정의
+  push: #push될때 마다
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest #우분투에서 작업이 실행되도록
+    steps: #명령을 실행하거나 다른 action을 실행함.
+      - name: Check out the codes #코드체크아웃을 함
+        uses: actions/checkout@v2 #실행할 액션의 이름을 적어줌
+
+      - name: Setup python environment #파이썬을 설치함.
+        id: setup-python
+        uses: actions/setup-python@v2
+        with: #uses를 사용할때 사용할 파라미터를 적어줌
+          python-version: 3.9.9 #파이썬 3.9.9버전을 사용할거다.
+        #명령을 실행하려면 run키워드를 주면됨
+      - name: Install Poetry #poetry깔고
+        run: | #<-얘는 파이프라인이라고 하는데 값이 여러줄일때 |를 씀
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+          echo "${HOME}/.poetry/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies #종속성을 설치하고
+        run: |
+          ${HOME}/.poetry/bin/poetry install
+
+      - name: Test python project #프로젝트의 테스트를 실행함
+        run: |
+          poetry run python manage.py test
