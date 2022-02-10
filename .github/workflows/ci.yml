@@ -25,6 +25,5 @@ jobs:
         run: |
           ${HOME}/.poetry/bin/poetry install
 
-      - name: Test python project #프로젝트의 테스트를 실행함
-        run: |
+      - name: Test python project #프로젝트의 테스트를 실행함함        run: |
           poetry run python manage.py test
