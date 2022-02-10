@@ -26,10 +26,11 @@ jobs:
           ${HOME}/.poetry/bin/poetry install
 
       - name: Test python project
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           poetry run python manage.py test
-        env:
-          SECRET_KEY : ${{ secrets.SECRET_KEY }}
+
 
 #name: Django CI
 #
