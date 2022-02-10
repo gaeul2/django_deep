@@ -28,6 +28,8 @@ jobs:
       - name: Test python project
         run: |
           poetry run python manage.py test
+        env:
+          SECRET_KEY : ${{ secrets.SECRET_KEY }}
 
 #name: Django CI
 #
