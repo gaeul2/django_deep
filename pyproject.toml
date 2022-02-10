@@ -31,12 +31,12 @@ strict = true
 module = "*.migrations.*"
 ignore_errors = true
 
-[[tool.mypy.overrides]]
+[[tool.mypy.overrides]]#주석아 어디갔니...?
 module = "manage"
 ignore_errors = true
 
-[tool.django-stubs]
+[tool.django-stubs]#주석이 사라진다....
 django_settings_module = "sparta.settings"
 
-[tool.isort]
+[tool.isort]# 주석....
 profile = "black"
