@@ -7,3 +7,5 @@ __pycache__
 
 secret.json
 secret.py
+
+sparta/local_settings.py

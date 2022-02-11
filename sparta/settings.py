@@ -23,11 +23,11 @@ from django.core.exceptions import ImproperlyConfigured
 # import secret
 
 # ----------------------깃허브용-----------------------
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------------------------------------------
 
 # ----------------------로컬용-----------------------
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # --------------------------------------------------------
 
 
@@ -41,7 +41,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ----------------------깃허브용-----------------------
 # SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = "${{secrets.SECRET_KEY}}"
+SECRET_KEY = "django-insecure-w2_uknh)(jf$fz7!%^r#u+ag$%cm+@c88lp=#%og9pc(6qdi*("
 # -------------------------------------------------------
 DEBUG = True
 
@@ -102,7 +102,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "sparta",
         "USER": "root",
-        "PASSWORD" : "${{secrets.DATABASE_PASSWORD}}",
+        "PASSWORD" : "1592",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -149,3 +149,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+#이 임포트문이 아래에 있는것은 덮어쓰기를 위해서임.
+try: #local_settings가 있으면 local_settings로 덮어쓰기를 해라
+    from sparta.local_settings import * #local_settings가 gitignore로 무시가 되었기때문에 임포트에 실패할 수도 있어서 try except문으로 감쌈
+except ImportError: #없으면 그냥 settings.py를 사용해라
+    pass
