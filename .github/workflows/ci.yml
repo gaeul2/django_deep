@@ -8,7 +8,7 @@ jobs:
     env:
       DB_DATABASE: sparta
       DB_USER: root
-      DB_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DB_PASSWORD: 1592
 
     runs-on: ubuntu-latest
     steps:
