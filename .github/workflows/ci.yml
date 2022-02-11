@@ -25,9 +25,12 @@ jobs:
         run: |
           ${HOME}/.poetry/bin/poetry install
 
+      - name: Setup tmate session #깃허브액션에서 test.py를 돌리다가 에러가 났기때문에 여기다 tmate 코드적어줌
+        uses: mxschmitt/action-tmate@v3
+
       - name: Test python project
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SECRET_KEY: "${{ secrets.SECRET_KEY }}"
         run: |
           poetry run python manage.py test
 
