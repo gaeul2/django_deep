@@ -25,8 +25,8 @@ jobs:
         run: |
           ${HOME}/.poetry/bin/poetry install
 
-      - name: Setup tmate session #깃허브액션에서 test.py를 돌리다가 에러가 났기때문에 여기다 tmate 코드적어줌
-        uses: mxschmitt/action-tmate@v3
+      - name: Setup tmate session #깃허브액션에서 test.py를 돌리다가 에러가 났기때문에 여기다 tmate 코드드적어줌
+       uses: mxschmitt/action-tmate@v3 #깃허브액션은 원래 실행하기로 한 코드가 에러가나면 꺼지는데 tmate는 무한루프를 돌게해줌
 
       - name: Test python project
         env:
