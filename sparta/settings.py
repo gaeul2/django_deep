@@ -10,33 +10,45 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import os
 import json
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from typing import List
 
+import pymysql
+from django.core.exceptions import ImproperlyConfigured
+
+import secret
+
+# ----------------------깃허브용-----------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+# -------------------------------------------------------
+
+# ----------------------로컬용-----------------------
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# --------------------------------------------------------
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# secret_file = os.path.join(BASE_DIR, 'secrets.json')
+#----------------------------로컬용----------------------------
+# SECRET_KEY = secret.SECRET_KEY
+# -------------------------------------------------------
 
-
-
+# ----------------------깃허브용-----------------------
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY = "${{secrets.SECRET_KEY}}"
-
+# -------------------------------------------------------
 DEBUG = True
 
 
 # 이친구는 타입힌트가 필요함.
 # (hint: "ALLOWED_HOSTS: List[<type>] = ...")
-ALLOWED_HOSTS:List[str] = []
+ALLOWED_HOSTS: List[str] = []
 
 
 # Application definition
@@ -83,11 +95,16 @@ WSGI_APPLICATION = "sparta.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+pymysql.install_as_MySQLdb()
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "sparta",
+        "USER": "root",
+        "PASSWORD" : "${{secrets.DATABASE_PASSWORD}}", #깃허브용
+        "HOST": "localhost",
+        "PORT": "3306",
     }
 }
 
