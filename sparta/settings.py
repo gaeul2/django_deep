@@ -20,7 +20,7 @@ from typing import List
 import pymysql
 from django.core.exceptions import ImproperlyConfigured
 
-import secret
+# import secret
 
 # ----------------------깃허브용-----------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
