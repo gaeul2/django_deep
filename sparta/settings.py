@@ -102,7 +102,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "sparta",
         "USER": "root",
-        "PASSWORD" : "${{secrets.DATABASE_PASSWORD}}", #깃허브용
+        "PASSWORD" : "${{secrets.DATABASE_PASSWORD}}",
         "HOST": "localhost",
         "PORT": "3306",
     }
