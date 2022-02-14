@@ -35,9 +35,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#----------------------------로컬용----------------------------
-# SECRET_KEY = secret.SECRET_KEY
-# -------------------------------------------------------
 
 # ----------------------깃허브용-----------------------
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -60,6 +57,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tabom.apps.TabomConfig",
 ]
 
 MIDDLEWARE = [
@@ -102,7 +100,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "sparta",
         "USER": "root",
-        "PASSWORD" : "1592",
+        "PASSWORD": "1592",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -150,8 +148,8 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#이 임포트문이 아래에 있는것은 덮어쓰기를 위해서임.
-try: #local_settings가 있으면 local_settings로 덮어쓰기를 해라
-    from sparta.local_settings import * #local_settings가 gitignore로 무시가 되었기때문에 임포트에 실패할 수도 있어서 try except문으로 감쌈
-except ImportError: #없으면 그냥 settings.py를 사용해라
+# 이 임포트문이 아래에 있는것은 덮어쓰기를 위해서임.
+try:  # local_settings가 있으면 local_settings로 덮어쓰기를 해라
+    from sparta.local_settings import *  # local_settings가 gitignore로 무시가 되었기때문에 임포트에 실패할 수도 있어서 try except문으로 감쌈
+except ImportError:  # 없으면 그냥 settings.py를 사용해라
     pass
