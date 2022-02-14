@@ -131,11 +131,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False  # 한국시간대 사용하기 위해 이친구 false로 바꿈
 
 
 # Static files (CSS, JavaScript, Images)
