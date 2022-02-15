@@ -94,3 +94,16 @@ class TestArticleService(TestCase):
         # Then
         self.assertEqual(0, len(articles[1].my_likes))  # 유효하지 않으므로 좋아요개수 0이여야함
         self.assertEqual(0, len(articles[0].my_likes))
+
+    def test_you_can_delete_an_article(self) -> None:
+        # Given user,article,like를 하나씩 생성후
+        user = User.objects.create(name="user1")
+        article = Article.objects.create(title="artice1")
+        like = do_like(user.id, article.id)
+
+        # When ariticle을 하나 삭제하고
+        delete_an_article(article.id)
+
+        # Then
+        self.assertFalse(Article.objects.filter(id=article.id).exists()) #article이 삭제가 되는것 검증
+        self.assertFalse(Like.objects.filter(id=like.id).exists())
