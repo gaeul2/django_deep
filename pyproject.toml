@@ -15,6 +15,7 @@ isort = "5.10.1"
 PyMySQL = "1.0.2"
 types-PyMySQL = "1.0.6"
 cryptography = "^36.0.1"
+articles = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 
