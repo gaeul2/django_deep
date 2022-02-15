@@ -13,7 +13,7 @@ class TestArticleService(TestCase):
         article = Article.objects.create(title=title)
 
         # When get_an_article로 article.id를 통해 조회한 게시글을 result_article에 저장
-        result_article = get_an_article(article.id)
+        result_article = get_an_article(0, article.id)  # get_an_article함수 바뀌어서 user_id와 상관없는곳은0을 넣어줌)
 
         # Then
         self.assertEqual(article.id, result_article.id)  # article.id와 조회한 글의 id가 같은지
@@ -25,7 +25,7 @@ class TestArticleService(TestCase):
 
         # Expect #article이 존재하지 않는 에러가 발생해야함.
         with self.assertRaises(Article.DoesNotExist):
-            get_an_article(invalid_article_id)  # 없는 article번호로 조회를 했을때
+            get_an_article(0, invalid_article_id)  # 없는 article번호로 조회를 했을때
 
     def test_get_article_list_should_prefetch_like(self) -> None:
         # Given
@@ -66,7 +66,7 @@ class TestArticleService(TestCase):
     #         [a.id for a in result_articles], #게시물을 역순정렬해서 20~11번까지의 id가 result_articles의 id 와 같은지확인
     #     )
 
-    def test_get_article_list_should_contain_my_like_when_like_exists(self) -> None:
+    def test_get_article_list_should_contain_my_likes_when_like_exists(self) -> None:
         # Given #user/article1, 거기에 좋아요, article2
         user = User.objects.create(name="test_user")
         article1 = Article.objects.create(title="artice1")
@@ -78,4 +78,19 @@ class TestArticleService(TestCase):
 
         # Then #attribute로 my_likes를 사용해서 할당할것임. 자기가 좋아요 했는지 여부를 나타내는 필드
         self.assertEqual(like.id, articles[1].my_likes[0].id)
+        self.assertEqual(0, len(articles[0].my_likes))
+
+    def test_get_article_list_should_not_contain_my_likes_when_user_id_is_zero(self) -> None:
+        # Given
+        user = User.objects.create(name="test_user")
+        article1 = Article.objects.create(title="article1")
+        Like.objects.create(user_id=user.id, article_id=article1.id)
+        Article.objects.create(title="article2")
+        invalid_user_id = 0
+
+        # When
+        articles = get_article_list(invalid_user_id, 0, 10)  # 유효하지 않은 id를 주었을때 검증할것
+
+        # Then
+        self.assertEqual(0, len(articles[1].my_likes))  # 유효하지 않으므로 좋아요개수 0이여야함
         self.assertEqual(0, len(articles[0].my_likes))
