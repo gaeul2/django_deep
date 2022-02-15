@@ -23,3 +23,6 @@ def get_article_list(user_id: int, offset: int, limit: int) -> QuerySet[Article]
 # 페이지네이터 클래스 사용법
 # def get_article_page(page: int, limit: int) -> Page:
 #     return Paginator(Article.objects.order_by("-id"), limit).page(page)
+
+def delete_an_article(article_id:int) -> None:
+    Article.objects.filter(id=article_id).delete()

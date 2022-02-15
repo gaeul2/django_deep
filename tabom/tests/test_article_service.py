@@ -104,6 +104,7 @@ class TestArticleService(TestCase):
         # When ariticle을 하나 삭제하고
         delete_an_article(article.id)
 
-        # Then
+        # Then queryset에 exist를 호출하면 호출에 부합하는 (첫줄기준)article이 있는지 검사. 있으면 True, 없으면 False
+        #assertFalse이므로 없는것 검증
         self.assertFalse(Article.objects.filter(id=article.id).exists()) #article이 삭제가 되는것 검증
-        self.assertFalse(Like.objects.filter(id=like.id).exists())
+        self.assertFalse(Like.objects.filter(id=like.id).exists()) #그때 좋아요도 함께 삭제되었는지 검증
