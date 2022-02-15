@@ -14,3 +14,4 @@
 #         with CaptureQueriesContext(connection) as ctx:
 #             article.delete()#article을 삭제했을때 어떻게 되는지
 #             print(ctx) #article을 지우기전 연결된 친구가 있느지 확인해서 like가 있으니 like를 먼저지우고, article을 지워줌. 장고가!
+
