@@ -1,7 +1,4 @@
-import articles as articles
-from django.db import connection
 from django.test import TestCase
-from django.test.utils import CaptureQueriesContext
 
 from tabom.models import Like, User
 from tabom.models.article import Article
@@ -38,8 +35,8 @@ class TestArticleService(TestCase):
 
         # When
         # with CaptureQueriesContext(connection) as ctx: #ctx.captured_queries라는 리스트안에 실행된 쿼리들이 모인대
-        with self.assertNumQueries(2):  # 몇번의 쿼리가 일어날지 테스트
-            result_articles = get_article_list(0, 10)  # offset과 limit임
+        with self.assertNumQueries(3):  # 몇번의 쿼리가 일어날지 테스트
+            result_articles = get_article_list(user.id, 0, 10)  # (user_id상관없기때문에 0//user.id로 해도됨) offset과 limit임
             result_counts = [a.like_set.count() for a in result_articles]
 
             # Then #len(result_articles) 대신 result_articles.count()써도 됨.
@@ -51,21 +48,34 @@ class TestArticleService(TestCase):
                 [a.id for a in result_articles],  # 게시물을 역순정렬해서 20~11번까지의 id가 result_articles의 id 와 같은지확인
             )
 
+    # 페이지네이터 사용법
+    # def test_get_article_page_should_prefetch_like(self) -> None:
+    #     #Given
+    #     user = User.objects.create(name='test_user')
+    #     articles = [Article.objects.create(title=f'{i}') for i in range(1,21)]
+    #     Like.objects.create(user_id=user.id, article_id=articles[-1].id) #[-1]로 가장 마지막에 생성된 게시물에 좋아요를 해보겠다.
+    #
+    #     #When
+    #     result_articles = get_article_page(1,10) #offset과 limit임
+    #
+    #     #Then #len(result_articles) 대신 result_articles.count()써도 됨.
+    #     self.assertEqual(len(result_articles), 10) #limit이 10이므로 길이도 10이어야함
+    #     self.assertEqual(1, result_articles[0].like_set.count())#가장마지막에 생성된 게시물에 좋아요했으니까 지금은 0번째로 불러와야 제일 첫게시물임.
+    #     self.assertEqual(
+    #         [a.id for a in reversed(articles[10:21])], #reversed로 역순정렬하는 효과
+    #         [a.id for a in result_articles], #게시물을 역순정렬해서 20~11번까지의 id가 result_articles의 id 와 같은지확인
+    #     )
 
-# 페이지네이터 사용법
-# def test_get_article_page_should_prefetch_like(self) -> None:
-#     #Given
-#     user = User.objects.create(name='test_user')
-#     articles = [Article.objects.create(title=f'{i}') for i in range(1,21)]
-#     Like.objects.create(user_id=user.id, article_id=articles[-1].id) #[-1]로 가장 마지막에 생성된 게시물에 좋아요를 해보겠다.
-#
-#     #When
-#     result_articles = get_article_page(1,10) #offset과 limit임
-#
-#     #Then #len(result_articles) 대신 result_articles.count()써도 됨.
-#     self.assertEqual(len(result_articles), 10) #limit이 10이므로 길이도 10이어야함
-#     self.assertEqual(1, result_articles[0].like_set.count())#가장마지막에 생성된 게시물에 좋아요했으니까 지금은 0번째로 불러와야 제일 첫게시물임.
-#     self.assertEqual(
-#         [a.id for a in reversed(articles[10:21])], #reversed로 역순정렬하는 효과
-#         [a.id for a in result_articles], #게시물을 역순정렬해서 20~11번까지의 id가 result_articles의 id 와 같은지확인
-#     )
+    def test_get_article_list_should_contain_my_like_when_like_exists(self) -> None:
+        # Given #user/article1, 거기에 좋아요, article2
+        user = User.objects.create(name="test_user")
+        article1 = Article.objects.create(title="artice1")
+        like = do_like(user.id, article1.id)
+        Article.objects.create(title="article2")
+
+        # When   #어떤 user가 요청했는지 알기위해 user.id를 인자로 받도록 get_article_list 함수 수정할것
+        articles = get_article_list(user.id, 0, 10)  # 여기서 get_article_list수정했기때문에 이 함수사용하는 모든 테스트 수정
+
+        # Then #attribute로 my_likes를 사용해서 할당할것임. 자기가 좋아요 했는지 여부를 나타내는 필드
+        self.assertEqual(like.id, articles[1].my_likes[0].id)
+        self.assertEqual(0, len(articles[0].my_likes))
