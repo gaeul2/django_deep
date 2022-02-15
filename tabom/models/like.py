@@ -6,7 +6,7 @@ from tabom.models.user import User
 
 
 class Like(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE) #장고에서의 cascade옵션을 적용하는것.
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     # updated_at = models.DateTimeField(auto_now=True)
     # created_at = models.DateTimeField(auto_now_add=True)
